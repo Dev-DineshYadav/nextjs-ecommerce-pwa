@@ -1,40 +1,133 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# YouVet Assignment - Next.js E-commerce PWA
 
-## Getting Started
+This project is a Progressive Web App (PWA) built with Next.js for an e-commerce platform. This document provides a comprehensive guide from installation to the usage of all files in the project.
 
-First, run the development server:
+## Table of Contents
+1. [Installation](#installation)
+2. [Project Structure](#project-structure)
+3. [File Usage](#file-usage)
+4. [Running the Project](#running-the-project)
+5. [Building for Production](#building-for-production)
+
+## Installation
+
+To get started with the project, follow these steps:
+
+1. **Clone the repository:**
+    ```bash
+    git clone https://github.com/yourusername/nextjs-ecommerce-pwa.git
+    cd nextjs-ecommerce-pwa
+    ```
+
+2. **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+## Project Structure
+
+The project structure is as follows:
+
+```
+nextjs-ecommerce-pwa/
+├── components/
+│   ├── InstallPrompt.tsx
+│   ├── ProductCard.tsx
+│   ├── SearchBar.js
+│   └── ...
+├── context/
+│   ├── CartContext.tsx
+│   └── ...
+├── pages/
+│   ├── products/
+│   │   └── [id].tsx
+│   ├── _app.js
+│   ├── _document.js
+│   └── index.js
+├── styles/
+│   ├── globals.css
+│   └── ...
+├── types/
+│   ├── next-pwa.d.ts
+│   └── product.ts
+├── utils/
+│   ├── api.ts
+│   └── cart.ts
+├── next.config.js
+├── package.json
+├── README.md
+```
+
+## File Usage
+
+### `components/`
+Contains reusable React components used throughout the project.
+
+- `InstallPrompt.tsx`: Component to prompt users to install the PWA.
+- `ProductCard.tsx`: A component to display individual product details.
+- `SearchBar.js`: A component for the search functionality.
+
+### `context/`
+Contains React context files for state management.
+
+- `CartContext.tsx`: Provides cart state and actions to the application.
+
+### `pages/`
+Contains the Next.js pages. Each file in this directory corresponds to a route in the application.
+
+- `products/[id].tsx`: Dynamic route for individual product pages.
+- `_app.js`: Custom App component to initialize pages.
+- `_document.js`: Custom Document component to augment the application's HTML and body tags.
+- `index.js`: The main landing page of the application.
+
+### `styles/`
+Contains global and component-specific styles.
+
+- `globals.css`: Global CSS styles.
+
+### `types/`
+Contains TypeScript type definitions.
+
+- `next-pwa.d.ts`: Type definitions for Next.js PWA.
+- `product.ts`: Type definitions for product data.
+
+### `utils/`
+Contains utility functions and helpers used across the project.
+
+- `api.ts`: Utility functions for API calls.
+- `cart.ts`: Utility functions for cart operations.
+
+### `next.config.js`
+Configuration file for Next.js.
+
+### `package.json`
+Contains project metadata and dependencies.
+
+### `README.md`
+The documentation file you are currently reading.
+
+## Running the Project
+
+To run the project in development mode, use the following command:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This will start the development server on `http://localhost:3000`.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Building for Production
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+To build the project for production, use the following command:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+```bash
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This will create an optimized production build in the `.next` directory. To start the production server, use:
 
-## Learn More
+```bash
+npm start
+```
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+This will start the server on `http://localhost:3000`.
