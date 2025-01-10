@@ -1,4 +1,5 @@
 {
+  "id": "/",
   "name": "NextJS E-commerce PWA",
   "short_name": "E-commerce PWA",
   "description": "A Progressive Web App for E-commerce",
