@@ -22,6 +22,8 @@ export default function InstallPrompt({
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstallable, setIsInstallable] = useState(false);
   const [currentScreenshot, setCurrentScreenshot] = useState(0);
+  const [isIconLoading, setIsIconLoading] = useState(true);
+  const [isScreenshotLoading, setIsScreenshotLoading] = useState(true);
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -60,12 +62,22 @@ export default function InstallPrompt({
     <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 bg-white rounded-lg shadow-lg p-4 border border-gray-200">
       <div className="flex items-start justify-between">
         <div className="flex items-center space-x-3">
-          <div className="relative w-12 h-12">
+          <div className="relative w-12 h-12 bg-gray-100 rounded-lg">
+            {isIconLoading && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+              </div>
+            )}
             <Image 
               src={icon} 
               alt={`${appName} icon`} 
               fill
-              className="rounded-lg object-cover"
+              sizes="48px"
+              quality={75}
+              priority={true}
+              onLoad={() => setIsIconLoading(false)}
+              className={`rounded-lg object-cover transition-opacity duration-300
+                ${isIconLoading ? 'opacity-0' : 'opacity-100'}`}
             />
           </div>
           <div className="flex-1">
@@ -84,7 +96,7 @@ export default function InstallPrompt({
         </button>
       </div>
 
-      <div className="mt-4 relative h-48">
+      <div className="mt-4 relative h-48 bg-gray-100 rounded-lg">
         {screenshots.map((screenshot, index) => (
           <div
             key={screenshot}
@@ -92,11 +104,25 @@ export default function InstallPrompt({
               index === currentScreenshot ? 'opacity-100' : 'opacity-0'
             }`}
           >
+            {isScreenshotLoading && index === currentScreenshot && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+              </div>
+            )}
             <Image
               src={screenshot}
               alt={`${appName} screenshot ${index + 1}`}
               fill
-              className="rounded-lg object-cover"
+              sizes="(max-width: 768px) 100vw, 384px"
+              quality={75}
+              priority={index === 0}
+              onLoad={() => {
+                if (index === currentScreenshot) {
+                  setIsScreenshotLoading(false);
+                }
+              }}
+              className={`rounded-lg object-cover transition-opacity duration-300
+                ${index === currentScreenshot && isScreenshotLoading ? 'opacity-0' : 'opacity-100'}`}
             />
           </div>
         ))}
@@ -105,7 +131,10 @@ export default function InstallPrompt({
             {screenshots.map((_, index) => (
               <button
                 key={index}
-                onClick={() => setCurrentScreenshot(index)}
+                onClick={() => {
+                  setCurrentScreenshot(index);
+                  setIsScreenshotLoading(true);
+                }}
                 className={`w-2 h-2 rounded-full ${
                   index === currentScreenshot ? 'bg-white' : 'bg-white/50'
                 }`}

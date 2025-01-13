@@ -10,10 +10,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
-    
+
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
-    
+
     setIsOnline(navigator.onLine);
 
     if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
@@ -36,7 +36,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <CartProvider>
       {!isOnline && (
-        <div className="fixed top-0 left-0 right-0 bg-blue-500 text-white text-center py-2 z-50">
+        <div className="sticky top-0 bg-blue-500 text-white text-center py-2 z-50">
           You are currently offline. Some features may be limited.
         </div>
       )}
