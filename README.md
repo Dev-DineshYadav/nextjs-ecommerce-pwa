@@ -15,7 +15,7 @@ To get started with the project, follow these steps:
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/yourusername/nextjs-ecommerce-pwa.git
+    git clone https://github.com/Dev-DineshYadav/nextjs-ecommerce-pwa.git
     cd nextjs-ecommerce-pwa
     ```
 
