@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useCart } from '@/contexts/CartContext';
 import { ArrowLeft, Star } from 'lucide-react';
+import { useState } from 'react';
 
 interface ProductPageProps {
   product: Product;
@@ -13,9 +14,21 @@ interface ProductPageProps {
 export default function ProductPage({ product }: ProductPageProps) {
   const router = useRouter();
   const { addToCart } = useCart();
+  const [mainImageLoading, setMainImageLoading] = useState(true);
+  const [thumbnailLoadingStates, setThumbnailLoadingStates] = useState<boolean[]>(
+    new Array(product.images?.length || 0).fill(true)
+  );
 
   const handleBack = () => {
     router.back();
+  };
+
+  const handleThumbnailLoad = (index: number) => {
+    setThumbnailLoadingStates(prev => {
+      const newStates = [...prev];
+      newStates[index] = false;
+      return newStates;
+    });
   };
 
   return (
@@ -31,30 +44,52 @@ export default function ProductPage({ product }: ProductPageProps) {
 
         <div className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
           <div className="grid md:grid-cols-2 gap-8">
-          <div className="space-y-2">
-  <div className="relative aspect-square w-11/12 overflow-hidden rounded-xl border border-gray-200">
-    <Image
-      src={product.thumbnail}
-      alt={product.title}
-      fill
-      className="object-cover object-center"
-    />
-  </div>
-  {product.images && product.images.length > 0 && (
-    <div className="grid grid-cols-4 gap-3">
-      {product.images.map((image, index) => (
-        <div key={index} className="relative aspect-square w-11/12 rounded-lg border border-gray-200 overflow-hidden">
-          <Image
-            src={image}
-            alt={`${product.title} - Image ${index + 1}`}
-            fill
-            className="object-cover object-center hover:scale-105 transition-transform duration-300"
-          />
-        </div>
-      ))}
-    </div>
-  )}
-</div>
+            <div className="space-y-2">
+              <div className="relative aspect-square w-11/12 overflow-hidden rounded-xl border border-gray-200 bg-gray-100">
+                {mainImageLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                  </div>
+                )}
+                <Image
+                  src={product.thumbnail}
+                  alt={product.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority
+                  quality={85}
+                  onLoad={() => setMainImageLoading(false)}
+                  className={`object-cover object-center transition-opacity duration-300
+                    ${mainImageLoading ? 'opacity-0' : 'opacity-100'}`}
+                />
+              </div>
+              {product.images && product.images.length > 0 && (
+                <div className="grid grid-cols-4 gap-3">
+                  {product.images.map((image, index) => (
+                    <div 
+                      key={index} 
+                      className="relative aspect-square w-11/12 rounded-lg border border-gray-200 overflow-hidden bg-gray-100"
+                    >
+                      {thumbnailLoadingStates[index] && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="w-6 h-6 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                        </div>
+                      )}
+                      <Image
+                        src={image}
+                        alt={`${product.title} - Image ${index + 1}`}
+                        fill
+                        sizes="(max-width: 768px) 25vw, 12vw"
+                        quality={75}
+                        onLoad={() => handleThumbnailLoad(index)}
+                        className={`object-cover object-center hover:scale-105 transition-all duration-300
+                          ${thumbnailLoadingStates[index] ? 'opacity-0' : 'opacity-100'}`}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
 
             <div className="space-y-6">
               <div>
@@ -88,7 +123,6 @@ export default function ProductPage({ product }: ProductPageProps) {
                   Add to Cart
                 </button>
               </div>
-
             </div>
           </div>
         </div>
